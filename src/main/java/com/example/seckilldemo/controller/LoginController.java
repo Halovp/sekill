@@ -40,9 +40,6 @@ public class LoginController {
      *
      * @param
      * @return java.lang.String
-     * @author LC
-     * @operation add
-     * @date 10:13 上午 2022/3/2
      **/
     @ApiOperation("跳转登录页面")
     @RequestMapping(value = "/toLogin", method = RequestMethod.GET)

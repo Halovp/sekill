@@ -22,6 +22,7 @@ import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.core.script.RedisScript;
@@ -42,9 +43,6 @@ import java.util.concurrent.TimeUnit;
 /**
  * 秒杀
  *
- * @author: LC
- * @date 2022/3/4 11:34 上午
- * @ClassName: SeKillController
  */
 @Slf4j
 @Controller
@@ -68,6 +66,7 @@ public class SeKillController implements InitializingBean {
     private Map<Long, Boolean> EmptyStockMap = new HashMap<>();
 
 
+    //秒杀验证
     @ApiOperation("获取验证码")
     @GetMapping(value = "/captcha")
     public void verifyCode(TUser tUser, Long goodsId, HttpServletResponse response) {
@@ -95,10 +94,6 @@ public class SeKillController implements InitializingBean {
      * @param tuser
      * @param goodsId
      * @param captcha
-     * @return com.example.seckilldemo.vo.RespBean
-     * @author LiChao
-     * @operation add
-     * @date 4:04 下午 2022/3/9
      **/
     @ApiOperation("获取秒杀地址")
     @AccessLimit(second = 5, maxCount = 5, needLogin = true)
@@ -132,14 +127,11 @@ public class SeKillController implements InitializingBean {
 
 
     /**
-     * 获取秒杀结果
+     * 获取秒杀结果，判断是否秒杀成功
      *
      * @param tUser
      * @param goodsId
      * @return orderId 成功 ；-1 秒杀失败 ；0 排队中
-     * @author LiChao
-     * @operation add
-     * @date 7:04 下午 2022/3/8
      **/
     @ApiOperation("获取秒杀结果")
     @GetMapping("getResult")
@@ -158,20 +150,18 @@ public class SeKillController implements InitializingBean {
      * @param user
      * @param goodsId
      * @return java.lang.String
-     * @author LC
-     * @operation add
-     * @date 11:36 上午 2022/3/4
      **/
     @ApiOperation("秒杀功能")
     @RequestMapping(value = "/{path}/doSeckill", method = RequestMethod.POST)
     @ResponseBody
     public RespBean doSecKill(@PathVariable String path, TUser user, Long goodsId) {
+
         if (user == null) {
             return RespBean.error(RespBeanEnum.SESSION_ERROR);
         }
         //优化后代码
         ValueOperations valueOperations = redisTemplate.opsForValue();
-        boolean check = orderService.checkPath(user, goodsId, path);
+        boolean check = orderService.checkPath(user, goodsId, path);//判断接口请求地址
         if (!check) {
             return RespBean.error(RespBeanEnum.REQUEST_ILLEGAL);
         }
@@ -186,13 +176,15 @@ public class SeKillController implements InitializingBean {
             return RespBean.error(RespBeanEnum.EMPTY_STOCK);
         }
         //预减库存
-//        Long stock = valueOperations.decrement("seckillGoods:" + goodsId);
+//        Long stock = valueOperations.decrement("seckillGoods:" + goodsId);.cast 快捷键
+
         Long stock = (Long) redisTemplate.execute(redisScript, Collections.singletonList("seckillGoods:" + goodsId), Collections.EMPTY_LIST);
         if (stock < 0) {
             EmptyStockMap.put(goodsId, true);
             valueOperations.increment("seckillGoods:" + goodsId);
             return RespBean.error(RespBeanEnum.EMPTY_STOCK);
         }
+        //rabbitmq发送消息
         SeckillMessage seckillMessag = new SeckillMessage(user, goodsId);
         mqSender.sendSeckillMessage(JsonUtil.object2JsonStr(seckillMessag));
         return RespBean.success(0);
@@ -233,9 +225,6 @@ public class SeKillController implements InitializingBean {
      * @param user
      * @param goodsId
      * @return java.lang.String
-     * @author LC
-     * @operation add
-     * @date 11:36 上午 2022/3/4
      **/
     @ApiOperation("秒杀功能-废弃")
     @RequestMapping(value = "/doSeckill2", method = RequestMethod.POST)
@@ -252,6 +241,7 @@ public class SeKillController implements InitializingBean {
             model.addAttribute("errmsg", RespBeanEnum.REPEATE_ERROR.getMessage());
             return "secKillFail";
         }
+
         TOrder tOrder = orderService.secKill(user, goodsVo);
         model.addAttribute("order", tOrder);
         model.addAttribute("goods", goodsVo);
@@ -263,9 +253,6 @@ public class SeKillController implements InitializingBean {
      *
      * @param
      * @return void
-     * @author LiChao
-     * @operation add
-     * @date 6:29 下午 2022/3/8
      **/
     @Override
     public void afterPropertiesSet() throws Exception {

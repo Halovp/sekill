@@ -13,8 +13,7 @@ import java.util.Date;
 /**
  * 
  *
- * @author LiChao
- * @since 2022-03-03
+ *
  */
 @TableName("t_order")
 @ApiModel(value = "", description = "")

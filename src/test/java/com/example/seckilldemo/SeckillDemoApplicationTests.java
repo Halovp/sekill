@@ -21,6 +21,7 @@ class SeckillDemoApplicationTests {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
     @Autowired
     private RedisScript<Boolean> redisScript;
 
@@ -43,7 +44,7 @@ class SeckillDemoApplicationTests {
     @Test
     public void testLock2() {
         ValueOperations valueOperations = redisTemplate.opsForValue();
-        //给锁添加一个过期时间
+        //给锁添加一个过期时间，setIfAbsent如果key不存在才可以设置成功
         Boolean isLock = valueOperations.setIfAbsent("k1", "v1", 5, TimeUnit.SECONDS);
         if (isLock) {
             valueOperations.set("name", "xxx");

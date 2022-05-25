@@ -1,4 +1,4 @@
-package com.example.seckilldemo.config;
+package com.example.seckilldemo.config.pack;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -11,9 +11,6 @@ import org.springframework.context.annotation.Configuration;
 /**
  * RabbitMQ配置类-Direct模式
  *
- * @author: LC
- * @date 2022/3/8 4:56 下午
- * @ClassName: RabbitMQDirectConfig
  */
 //@Configuration
 public class RabbitMQDirectConfig {
@@ -34,18 +31,5 @@ public class RabbitMQDirectConfig {
 //        return new Queue(QUEUE02);
 //    }
 //
-//    @Bean
-//    public DirectExchange directExchange() {
-//        return new DirectExchange(EXCHANGE);
-//    }
-//
-//    @Bean
-//    public Binding binding01() {
-//        return BindingBuilder.bind(queue01()).to(directExchange()).with(ROUTINGKEY01);
-//    }
-//
-//    @Bean
-//    public Binding binding02() {
-//        return BindingBuilder.bind(queue02()).to(directExchange()).with(ROUTINGKEY02);
-//    }
+
 }

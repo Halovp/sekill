@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServletResponse;
  * 用户表 服务类
  * </p>
  *
- * @author LiChao
- * @since 2022-03-02
  */
 
 public interface ITUserService extends IService<TUser> {
@@ -25,10 +23,7 @@ public interface ITUserService extends IService<TUser> {
      * @param loginVo
      * @param request
      * @param response
-     * @return com.example.seckilldemo.vo.RespBean
-     * @author LC
-     * @operation add
-     * @date 1:49 下午 2022/3/3
+     *
      **/
     RespBean doLongin(LoginVo loginVo, HttpServletRequest request, HttpServletResponse response);
 
@@ -36,10 +31,7 @@ public interface ITUserService extends IService<TUser> {
      * 根据cookie获取用户
      *
      * @param userTicket
-     * @return com.example.seckilldemo.entity.TUser
-     * @author LC
-     * @operation add
-     * @date 1:50 下午 2022/3/3
+     *
      **/
     TUser getUserByCookie(String userTicket, HttpServletRequest request, HttpServletResponse response);
 
@@ -50,10 +42,7 @@ public interface ITUserService extends IService<TUser> {
      * @param userTicket
      * @param id
      * @param password
-     * @return com.example.seckilldemo.vo.RespBean
-     * @author LC
-     * @operation add
-     * @date 9:05 下午 2022/3/4
+     *
      **/
     RespBean updatePassword(String userTicket, String password, HttpServletRequest request, HttpServletResponse response);
 }

@@ -22,8 +22,6 @@ import java.util.List;
  * 用户表 前端控制器
  * </p>
  *
- * @author LiChao
- * @since 2022-03-02
  */
 @RestController
 @RequestMapping("/user")
@@ -36,6 +34,11 @@ public class TUserController {
     @Autowired
     private MQSender mqSender;
 
+    /**
+     * 测试返回用户信息
+     * @param user
+     * @return
+     */
     @RequestMapping(value = "/info", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("返回用户信息")
@@ -44,53 +47,7 @@ public class TUserController {
     }
 
 
-//    @RequestMapping(value = "/mq", method = RequestMethod.GET)
-//    @ResponseBody
-//    public void mq() {
-//        mqSender.send("Hello");
-//    }
-//
-//    @RequestMapping(value = "/mq/fanout", method = RequestMethod.GET)
-//    @ResponseBody
-//    public void mqFanout() {
-//        mqSender.send("Hello");
-//    }
-//
-//    @RequestMapping(value = "/mq/direct01", method = RequestMethod.GET)
-//    @ResponseBody
-//    public void mqDirect01() {
-//        mqSender.send01("Hello Red");
-//    }
-//
-//    @RequestMapping(value = "/mq/direct02", method = RequestMethod.GET)
-//    @ResponseBody
-//    public void mqDirect02() {
-//        mqSender.send02("Hello Green");
-//    }
-//
-//    @RequestMapping(value = "/mq/topic01", method = RequestMethod.GET)
-//    @ResponseBody
-//    public void mqtopic01() {
-//        mqSender.send03("Hello Red");
-//    }
-//
-//    @RequestMapping(value = "/mq/topic02", method = RequestMethod.GET)
-//    @ResponseBody
-//    public void mqtopic02() {
-//        mqSender.send04("Hello Green");
-//    }
-//
-//    @RequestMapping(value = "/mq/header01", method = RequestMethod.GET)
-//    @ResponseBody
-//    public void header01() {
-//        mqSender.send05("Hello 01");
-//    }
-//
-//    @RequestMapping(value = "/mq/header02", method = RequestMethod.GET)
-//    @ResponseBody
-//    public void header02() {
-//        mqSender.send06("Hello 02");
-//    }
+
 
 
     @GetMapping("/createuser")

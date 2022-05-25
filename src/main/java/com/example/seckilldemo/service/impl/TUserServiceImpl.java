@@ -27,8 +27,6 @@ import javax.servlet.http.HttpServletResponse;
  * 用户表 服务实现类
  * </p>
  *
- * @author LiChao
- * @since 2022-03-02
  */
 @Service
 @Primary
@@ -58,7 +56,7 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
         if (user == null) {
             throw new GlobalException(RespBeanEnum.LOGIN_ERROR);
         }
-//        System.out.println(MD5Util.formPassToDBPass(password, user.getSalt()));
+        System.out.println(MD5Util.formPassToDBPass(password, user.getSalt()));
         //判断密码是否正确
         if (!MD5Util.formPassToDBPass(password, user.getSalt()).equals(user.getPassword())) {
             throw new GlobalException(RespBeanEnum.LOGIN_ERROR);
@@ -86,7 +84,7 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
         return user;
     }
 
-    @Override
+    @Override//每一次mysql用户信息变更时要去更新redis中储存的用户信息
     public RespBean updatePassword(String userTicket, String password, HttpServletRequest request, HttpServletResponse response) {
         TUser user = getUserByCookie(userTicket, request, response);
         if (user == null) {

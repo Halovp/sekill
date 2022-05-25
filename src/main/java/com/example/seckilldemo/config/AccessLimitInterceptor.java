@@ -21,9 +21,7 @@ import java.io.PrintWriter;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author: LC
- * @date 2022/3/9 4:27 下午
- * @ClassName: AccessLimitInterceptor
+ *
  */
 @Component
 public class AccessLimitInterceptor implements HandlerInterceptor {
@@ -68,6 +66,12 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
         return true;
     }
 
+    /**
+     * 构建返回错误信息对象
+     * @param response
+     * @param respBeanEnum
+     * @throws IOException
+     */
     private void render(HttpServletResponse response, RespBeanEnum respBeanEnum) throws IOException {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
@@ -78,6 +82,7 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
         printWriter.close();
     }
 
+    //获取当前登录用户
     private TUser getUser(HttpServletRequest request, HttpServletResponse response) {
         String userTicket = CookieUtil.getCookieValue(request, "userTicket");
         if (StringUtils.isEmpty(userTicket)) {

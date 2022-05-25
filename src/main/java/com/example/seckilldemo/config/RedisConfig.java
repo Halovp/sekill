@@ -12,9 +12,6 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 /**
  * Redis配置类
  *
- * @author: LC
- * @date 2022/3/3 1:40 下午
- * @ClassName: RedisConfig
  */
 @Configuration
 public class RedisConfig {
@@ -45,7 +42,7 @@ public class RedisConfig {
 //        return redisScript;
 //    }
 
-    @Bean
+    @Bean//redis分布式锁
     public DefaultRedisScript<Long> script() {
         DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>();
         //lock.lua脚本位置和application.yml同级目录

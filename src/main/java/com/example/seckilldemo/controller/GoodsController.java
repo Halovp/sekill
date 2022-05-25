@@ -30,9 +30,6 @@ import java.util.concurrent.TimeUnit;
 /**
  * 商品
  *
- * @author: LC
- * @date 2022/3/2 5:56 下午
- * @ClassName: GoodsController
  */
 @Controller
 @RequestMapping("goods")
@@ -136,6 +133,7 @@ public class GoodsController {
         return html;
     }
 
+    //优化详情加载页，ajax异步请求
     @ApiOperation("商品详情")
     @RequestMapping(value = "/detail/{goodsId}", method = RequestMethod.GET)
     @ResponseBody

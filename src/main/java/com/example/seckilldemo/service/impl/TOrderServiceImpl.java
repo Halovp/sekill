@@ -37,8 +37,6 @@ import java.util.concurrent.TimeUnit;
 /**
  * 服务实现类
  *
- * @author LiChao
- * @since 2022-03-03
  */
 @Service
 @Primary
@@ -58,11 +56,13 @@ public class TOrderServiceImpl extends ServiceImpl<TOrderMapper, TOrder> impleme
     @Transactional
     @Override
     public TOrder secKill(TUser user, GoodsVo goodsVo) {
+
+        //todo 解决超卖问题
         ValueOperations valueOperations = redisTemplate.opsForValue();
 
         TSeckillGoods seckillGoods = itSeckillGoodsService.getOne(new QueryWrapper<TSeckillGoods>().eq("goods_id", goodsVo.getId()));
-        seckillGoods.setStockCount(seckillGoods.getStockCount() - 1);
-//        itSeckillGoodsService.updateById(seckillGoods);
+        seckillGoods.setStockCount(seckillGoods.getStockCount() - 1);//库存预减一
+//        itSeckillGoodsService.updateById(seckillGoods);//在更新商品信息的时候并没有做判断
 //        boolean seckillGoodsResult = itSeckillGoodsService.update(new UpdateWrapper<TSeckillGoods>()
 //                .set("stock_count", seckillGoods.getStockCount())
 //                .eq("id", seckillGoods.getId())
@@ -73,6 +73,7 @@ public class TOrderServiceImpl extends ServiceImpl<TOrderMapper, TOrder> impleme
                 .eq("goods_id", goodsVo.getId())
                 .gt("stock_count", 0)
         );
+
 //        if (!seckillGoodsResult) {
 //            return null;
 //        }
@@ -101,7 +102,9 @@ public class TOrderServiceImpl extends ServiceImpl<TOrderMapper, TOrder> impleme
         tSeckillOrder.setOrderId(order.getId());
         tSeckillOrder.setGoodsId(goodsVo.getId());
         itSeckillOrderService.save(tSeckillOrder);
+        //将秒杀订单存入redis
         redisTemplate.opsForValue().set("order:" + user.getId() + ":" + goodsVo.getId(), tSeckillOrder);
+
         return order;
     }
 
