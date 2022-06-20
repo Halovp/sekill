@@ -1,5 +1,6 @@
 package com.example.seckilldemo.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.conditions.update.UpdateChainWrapper;
@@ -53,12 +54,13 @@ public class TOrderServiceImpl extends ServiceImpl<TOrderMapper, TOrder> impleme
     @Autowired
     private RedisTemplate redisTemplate;
 
-    @Transactional
+    @Transactional//开启事务
     @Override
     public TOrder secKill(TUser user, GoodsVo goodsVo) {
 
         //todo 解决超卖问题
         ValueOperations valueOperations = redisTemplate.opsForValue();
+
 
         TSeckillGoods seckillGoods = itSeckillGoodsService.getOne(new QueryWrapper<TSeckillGoods>().eq("goods_id", goodsVo.getId()));
         seckillGoods.setStockCount(seckillGoods.getStockCount() - 1);//库存预减一
@@ -70,7 +72,7 @@ public class TOrderServiceImpl extends ServiceImpl<TOrderMapper, TOrder> impleme
 //        );
         boolean seckillGoodsResult = itSeckillGoodsService.update(new UpdateWrapper<TSeckillGoods>()
                 .setSql("stock_count = " + "stock_count-1")
-                .eq("goods_id", goodsVo.getId())
+                .eq("Goods_Id", goodsVo.getId())
                 .gt("stock_count", 0)
         );
 

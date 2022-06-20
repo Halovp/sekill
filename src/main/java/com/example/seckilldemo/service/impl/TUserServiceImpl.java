@@ -47,7 +47,7 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
 //        if (StringUtils.isEmpty(mobile) || StringUtils.isEmpty(password)) {
 //            throw new GlobalException(RespBeanEnum.LOGIN_ERROR);
 //        }
-        //TODO 因为我懒测试的时候，把手机号码和密码长度校验去掉了，可以打开。页面和实体类我也注释了，记得打开
+
 //        if (!ValidatorUtil.isMobile(mobile)) {
 //            return RespBean.error(RespBeanEnum.MOBILE_ERROR);
 //        }

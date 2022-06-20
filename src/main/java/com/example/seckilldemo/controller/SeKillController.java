@@ -117,6 +117,7 @@ public class SeKillController implements InitializingBean {
 //        }
 
 
+        //校验码检测
         boolean check = orderService.checkCaptcha(tuser, goodsId, captcha);
         if (!check) {
             return RespBean.error(RespBeanEnum.ERROR_CAPTCHA);

@@ -19,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+
 /**
  * 消息消费者
  *
@@ -26,7 +28,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Slf4j
-public class MQReceiver {
+public  class MQReceiver {
 
     @Autowired
     private ITGoodsService itGoodsServicel;
@@ -62,6 +64,18 @@ public class MQReceiver {
 
     }
 
+    //支付成功后的回调
+    
+
+
+    public static void main(String[] args) {
+        HashMap<Integer, String> map = new HashMap<>();
+        map.put(1,"lzh");
+
+        String lyx = map.put(1, "lyx");
+        System.out.println(lyx);
+        System.out.println(map);
+    }
 
 
 }
